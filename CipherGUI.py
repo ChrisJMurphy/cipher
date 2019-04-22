@@ -13,6 +13,8 @@ import math
 #Needed for progress bars and crashing failsafe
 import time
 
+#DOES NOT WORK WITH TEXT CONTAINING 'J', 'j', '\n', or any other character not included in the keysquares
+    #These can be modified to include the characters, '\n' does not work however
 #Primary function to draw the program and run the underlying functions for enc/decryption
 def CipherGUI():
     #Draw Window and set dimensions, background -> Black
@@ -39,12 +41,14 @@ def CipherGUI():
     intro = Text(Point(2, 2.5), 'First: File to be Encrypted/Decrypted,')
     intro.setFill('lime')
     intro.draw(win)
+    intro.move(0, 0.2)
+    intro.setSize(8)
     intro2 = intro.clone()
-    intro2.move(0, -0.2)
+    intro2.move(0, -0.15)
     intro2.setText('Second: File to be Written to.')
     intro2.draw(win)
     intro3 = intro.clone()
-    intro3.move(0, 0.2)
+    intro3.move(0, 0.15)
     intro3.setText('Press: Select Files')
     intro3.draw(win)
     #Output File Section: Originally 'Key' section
@@ -63,15 +67,25 @@ def CipherGUI():
     #Entry Line for File
         #File to be read FROM
     filetxt = keytxt.clone()
-    filetxt.move(0, 0.25)
+    filetxt.move(0, 0.29)
     filetxt.setText('File:')
     filetxt.draw(win)
     fileentry = Entry(Point(2, 2.07), 22)
+    fileentry.setText('Enter File Path')
     fileentry.draw(win)
         #Output File Line
             #Drawn on its own to prevent text display issues involved with the move() function
     outputentry = Entry(Point(2, 1.77), 22)
+    outputentry.setText('Enter File Path')
     outputentry.draw(win)
+    #Key Selector
+    keyselect = filetxt.clone()
+    keyselect.move(0, 0.29)
+    keyselect.setText('Key:')
+    keyselect.draw(win)
+    keyentry = Entry(Point(2, 2.37), 22)
+    keyentry.setText('Enter Key: ie. keysq1')
+    keyentry.draw(win)
     #Status Message
         # Later modified during processing to display 'Processing' and 'Done!'
     message = Text(Point(3.5, 0.625), 'Ready')
@@ -160,6 +174,12 @@ def CipherGUI():
                             if mouseclick.getY() <= 0.75:
                                 #'Fake' progress bar and processing section
                                 message.setText('Processing')
+                                #Retrieves key for keysq
+                                keysq = keyentry.getText()
+                                if keysq == 'keysq1':
+                                    keysq = keysq1
+                                if keysq == 'keysq2':
+                                    keysq = keysq2
                                 #Initiates progress bar before running the writing function to show the program has started
                                 time.sleep(1)
                                 progress1d.setFill('lime')
@@ -185,6 +205,11 @@ def CipherGUI():
                         if mouseclick.getY() >= 1:
                             if mouseclick.getY() <= 1.25:
                                 message2.setText('Processing')
+                                keysq = keyentry.getText()
+                                if keysq == 'keysq1':
+                                    keysq = keysq1
+                                if keysq == 'keysq2':
+                                    keysq = keysq2
                                 time.sleep(1)
                                 progress1.setFill('lime')
                                 encwrite(fileentry.getText(), outputentry.getText(), keysq)
@@ -233,7 +258,7 @@ outfilename = 'outsample.txt'
     #Difficult to enter as a user so functionality is removed from main program
     #Can be changed in code, adding a keysq selector may be useful?
     #New or modified versions simply shuffle where the intended digits are in the square ->variety
-keysq =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+keysq1 =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
            'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
            'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -241,6 +266,19 @@ keysq =   ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
            'y', 'z', '1', '2', '3', '4', '5', '6',
            '7', '8', '9', '0', ',', '.', "'", ' ']
+
+#8x8 V2
+keysq2 =   [' ', "'", '.', ',', '0', '9', '8', '7',
+            '6', '5', '4', '3', '2', '1', 'z', 'y',
+            'x', 'w', 'v', 'u', 't', 's', 'r', 'q',
+            'p', 'o', 'n', 'm', 'l', 'k', 'i', 'h',
+            'g', 'f', 'e', 'd', 'c', 'b', 'a', 'Z',
+            'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R',
+            'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'I',
+            'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A']
+
+#8x8 V3
+keysq3 =   []
 
 #Encryption function to read the square, does not include bifid shifting
 def encrypt(filename, keysq):
