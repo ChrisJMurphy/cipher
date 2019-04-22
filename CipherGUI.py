@@ -15,12 +15,14 @@ import time
 
 #DOES NOT WORK WITH TEXT CONTAINING 'J', 'j', '\n', or any other character not included in the keysquares
     #These can be modified to include the characters, '\n' does not work however
+    
 #Primary function to draw the program and run the underlying functions for enc/decryption
 def CipherGUI():
     #Draw Window and set dimensions, background -> Black
     win = GraphWin('Bifid Cipher Tool', 400, 300)
     win.setCoords(0, 0, 4, 3)
     win.setBackground('black')
+    
     #Draw Decryptor Button
     DEbutton = Rectangle(Point(0.5, 0.5), Point(1, 0.75))
     DEbutton.setOutline('lime')
@@ -29,6 +31,7 @@ def CipherGUI():
     DEtxt.setFill('lime')
     DEtxt.draw(win)
     DEbutton.draw(win)
+    
     #Draw Encryptor Button
     ENbutton = DEbutton.clone()
     ENbutton.move(0, 0.5)
@@ -37,6 +40,7 @@ def CipherGUI():
     ENtxt.move(0, 0.5)
     ENtxt.draw(win)
     ENbutton.draw(win)
+    
     #Draw 'Title': Instructions on General Usage
     intro = Text(Point(2, 2.5), 'First: File to be Encrypted/Decrypted,')
     intro.setFill('lime')
@@ -51,6 +55,7 @@ def CipherGUI():
     intro3.move(0, 0.15)
     intro3.setText('Press: Select Files')
     intro3.draw(win)
+    
     #Output File Section: Originally 'Key' section
         #File to be written TO
     keytxt = ENtxt.clone()
@@ -64,6 +69,7 @@ def CipherGUI():
     RNDtxt.setText('Select Files')
     RNDtxt.move(1.25, -0.275)
     RNDtxt.draw(win)
+    
     #Entry Line for File
         #File to be read FROM
     filetxt = keytxt.clone()
@@ -78,6 +84,7 @@ def CipherGUI():
     outputentry = Entry(Point(2, 1.77), 22)
     outputentry.setText('Enter File Path')
     outputentry.draw(win)
+    
     #Key Selector
     keyselect = filetxt.clone()
     keyselect.move(0, 0.29)
@@ -86,6 +93,7 @@ def CipherGUI():
     keyentry = Entry(Point(2, 2.37), 22)
     keyentry.setText('Enter Key: ie. keysq1')
     keyentry.draw(win)
+    
     #Status Message
         # Later modified during processing to display 'Processing' and 'Done!'
     message = Text(Point(3.5, 0.625), 'Ready')
@@ -94,6 +102,7 @@ def CipherGUI():
     message2 = message.clone()
     message2.move(0, 0.5)
     message2.draw(win)
+    
     #Exit Button
         #Dimensions for checkMouse() should be X >= 3.6 and Y >= 2.6
     exitbutton = Rectangle(Point(3.6, 2.7), Point(4, 3))
@@ -102,6 +111,7 @@ def CipherGUI():
     exittext = Text(Point(3.8, 2.85), 'Exit')
     exittext.setFill('lime')
     exittext.draw(win)
+    
     #Encryptor and Decryptor 'Progress' Bars
         #Simple time functions during processing to 'fake' progress bars with the setFill() function
         #Potential function for this section had issues differentiating
@@ -127,6 +137,7 @@ def CipherGUI():
     progress7 = progress6.clone()
     progress7.move(0.2, 0)
     progress7.draw(win)
+    
     #Progress Bar for Decryptor
     progress1d = progress1.clone()
     progress1d.move(0, -0.5)
@@ -155,6 +166,7 @@ def CipherGUI():
     progressbar2 = progressbar1.clone()
     progressbar2.move(0, -0.5)
     progressbar2.draw(win)
+    
     #Get Mouse for buttons: checkMouse() used instead to allow continuous clicking by user
         #while function used to prevent program from jumping outside if statements and crashing
             #temp -> temporary
@@ -163,10 +175,12 @@ def CipherGUI():
         #Forces screen update to prevent freezing and as a failsafe for the sleep() function
         update(30) 
         mouseclick = win.checkMouse()
-        #Checks for user key 'Escape' to the exit the program, in case checkMouse() for the exit button fails
+    
+    #Checks for user key 'Escape' to the exit the program, in case checkMouse() for the exit button fails
         keypress = win.checkKey()
         if temp == 1:
             if mouseclick: #Program fails to find mouseclick/intiate if structure without this line
+
                 #Decryption Button
                 if mouseclick.getX() >= 0.5:
                     if mouseclick.getX() <= 1:
@@ -199,6 +213,7 @@ def CipherGUI():
                                 time.sleep(1)
                                 progress7d.setFill('lime')
                                 message.setText('Done!')
+
                 #Encryption Button
                 if mouseclick.getX() >= 0.5:
                     if mouseclick.getX() <= 1:
@@ -228,6 +243,7 @@ def CipherGUI():
                                 time.sleep(1)
                                 progress7.setFill('lime')
                                 message2.setText('Done!')
+
                 #File Selector Button
                     #Runs both file selections 1 after the other, intro text explains this
                     #Separating this may improve clarity but may needlessly complicate code
@@ -239,6 +255,7 @@ def CipherGUI():
                                 fileentry.setText(file1)
                                 file2 = askopenfilename()
                                 outputentry.setText(file2)
+
                 #Exit Button
                     #Fails on occassion following decryption/encryption, non-reproducible and random
                 if mouseclick.getX() >= 3.6:
@@ -246,14 +263,17 @@ def CipherGUI():
                         if mouseclick.getY() >= 2.6:
                             if mouseclick.getY() <= 3:
                                 win.close()
+
         #Exit failsafe
         if keypress == 'Escape':
             win.close()
 
 #Default filename for debugging and testing purposes
 filename = 'sample.txt.'
+
 #Default writing filename for debuging and testing purposes
 outfilename = 'outsample.txt'
+
 #Default 8x8 polybius square
     #Difficult to enter as a user so functionality is removed from main program
     #Can be changed in code, adding a keysq selector may be useful?
@@ -284,9 +304,11 @@ keysq3 =   []
 def encrypt(filename, keysq):
     #Sets to 8, allows for other keysq usage in the future of any dimensions
     keysqdim = int(math.sqrt(len(keysq)))
+
     #Opens the file to be read from
     infile = open(filename, "r")
     encbody = []
+
     #readline() to prevent the file from being interpreted as 1 member of a list
     for body in infile.readline():
         for i in range(len(body)):
@@ -302,14 +324,18 @@ def encrypt(filename, keysq):
 #Decryption function to translate encrypt() outputs backwards
 def decrypt(filename, keysq):
     infile = open(filename, "r")
+
     keysqdim = int(math.sqrt(len(keysq)))
+
     decbody = []
+
     for encbody in infile.readlines():
         #Halves value read from the encrypted text
         for i in range(int(len(encbody)/2)):
             #Multiplies the taken values to add back to their original, keysqdim needed
             index = (int(encbody[(i * 2)]) - 1) * keysqdim + (int(encbody[i * 2 + 1]) - 1)
             decbody.append(keysq[index])
+
     #Returns the text to its original readable form
     result = ''.join(decbody)
     return result
@@ -323,25 +349,32 @@ def decrypt(filename, keysq):
 def encbifid(filename, keysq):
     #Initiate empty row list
     rows = []
+
     #Initiate empty column list
     cols = []
     encbody = encrypt(filename, keysq)
+
     #Separates the encrypted text at every other number
     for i in range(len(encbody)):
         coordinate = encbody[i]
         rows.append(coordinate[0])
         cols.append(coordinate[1])
+
     #Stacks separated into one string
         #ie: 234567-> 246357
     biencbody = rows + cols
+
     #Initiate empty pairing list for reseparating into polybius coordinates
     pair = []
+
     #Reseparates into 2-digit coordinates for decryption
     for i in range(len(rows)):
         pair.append(''.join(biencbody[(i * 2):(i * 2 + 2)]))
     biencbody = pair
+
     #Redefines keysq dimension as 8, allows for later addition of more keysquares without having this as a set number
     keysqdim = int(math.sqrt(len(keysq)))
+
     #Modified form of the decryption function due to the intended file already having been read from
     decbody = []
     for encbody in biencbody:
@@ -354,21 +387,28 @@ def encbifid(filename, keysq):
 def decbifid(filename, keysq):
     #Re-encrypts the text so it can be unshuffled
     biencbody = encrypt(filename, keysq)
+
     #Converts the list into a single string
     presep = ''.join(biencbody)
+
     #Retrieves row values (First half)
     rows = list(presep[:len(presep)//2])
+
     #Retrieves column values (Second half)
     cols = list(presep[len(presep)//2:len(presep)])
+
     #Initiates empty string for recombination
     postsep = ''
+
     #Combines the rows and columns at every other number to unshuffle
     for i in range(len(rows)):
         postsep = postsep + (rows[i] + cols[i])
     keysqdim = int(math.sqrt(len(keysq)))
     decbody = []
+
     #Converts string into a list of the individual numbers to be decrypted
     postsep = [postsep[i:i + 2] for i in range(0, len(postsep), 2)]
+
     #Modified form of the decryption function
     for encbody in postsep:
         for i in range(int(len(encbody)/2)):
