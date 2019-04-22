@@ -298,7 +298,8 @@ keysq2 =   [' ', "'", '.', ',', '0', '9', '8', '7',
             'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A']
 
 #8x8 V3
-keysq3 =   []
+#Left open for editing or customizing
+#keysq3 =   []
 
 #Encryption function to read the square, does not include bifid shifting
 def encrypt(filename, keysq):
