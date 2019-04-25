@@ -263,11 +263,12 @@ def CipherGUI():
                         if mouseclick.getY() >= 2.6:
                             if mouseclick.getY() <= 3:
                                 win.close()
-
+                                break
+                                
         #Exit failsafe
         if keypress == 'Escape':
             win.close()
-
+            break
 #Default filename for debugging and testing purposes
 filename = 'sample.txt.'
 
